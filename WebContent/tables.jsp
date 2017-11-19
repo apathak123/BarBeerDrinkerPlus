@@ -1,3 +1,9 @@
+<!-- added by harsh -->
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<!-- end added by harsh -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -230,6 +236,76 @@
         </li>
         <li class="breadcrumb-item active">Tables</li>
       </ol>
+      <!-- added by harsh -->
+<form name="f1" method="get" action="#">
+       <select name="disptable">
+           <option >Averagesalaryperoccupation</option>
+           <option>Bar</option>   
+           <option>Barranks</option>
+           <option>Barreviewers</option>
+           <option>Barreviews</option>
+           <option>Beer</option>
+           <option>Drinker</option>
+           <option>Frequents</option>
+           <option>Likes</option>
+           <option>Numberofbeerstillbloodalcohollevel</option>
+       </select>
+     <input type="submit" name="submit" value="Select Table"/>
+    </form>
+    <%-- To display selected value from dropdown list. --%>
+     <% 
+     	out.print("the output is");
+     	out.print(request.getParameter("disptable"));
+        out.print("end output");    		  
+     try{
+    	//Get the database connection
+			ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			if (con != null)
+			out.print("con wasnt null");
+			else 
+				out.print("con was null");
+			//Create a SQL statement
+			Statement stmt = con.createStatement();
+			out.print(2);
+			//Get the selected button from above 
+			String entity = request.getParameter("disptable");
+			out.print(3);
+			//Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
+			String str = "SELECT * FROM " + entity;
+			out.print(4);
+			//Run the query against the database.
+			out.print(str);
+			ResultSet result = stmt.executeQuery(str);
+			//Make an HTML table to show the results in:
+			out.print("<table>");
+
+			if (entity.equals("Averagesalaryperoccupation"))
+			{
+				out.print("<tr>");
+				out.print("<td>");out.print("occupation");out.print("</td>");
+				out.print("<td>");out.print("average_salaries");out.print("</td>");
+				out.print("</tr>");
+				//parse out the results
+				while (result.next()) 
+				{
+					out.print("<tr>");
+					out.print("<td>");out.print(result.getString("occupation"));out.print("</td>");
+					out.print("<td>");out.print(result.getString("average_salaries"));out.print("</td>");
+					out.print("</tr>");
+				}
+			}
+			out.print("</table>");
+			//close the connection.
+			db.closeConnection(con);
+     }catch (Exception e) {
+			out.print(e);
+			out.print("an error occured");
+		}
+      %>
+		
+			
+      <!-- end added by harsh -->
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
